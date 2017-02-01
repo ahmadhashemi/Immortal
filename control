@@ -3,7 +3,7 @@ Name: Immortal
 Depends: mobilesubstrate
 Version: 1.2
 Architecture: iphoneos-arm
-Description: Prevent Cydia Impactor applications from crashing
+Description: Prevent expiration of signed iOS applications & bypass 3 free signed applications per device limit
 Maintainer: Ahmad
 Author: Ahmad
 Section: Tweaks
