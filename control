@@ -1,0 +1,9 @@
+Package: com.ahmad.immortal
+Name: Immortal
+Depends: mobilesubstrate
+Version: 1.2
+Architecture: iphoneos-arm
+Description: Prevent Cydia Impactor applications from crashing
+Maintainer: Ahmad
+Author: Ahmad
+Section: Tweaks
