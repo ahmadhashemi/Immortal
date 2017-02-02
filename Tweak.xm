@@ -2,27 +2,81 @@
 
 static NSString *preferencesFilePath = @"/private/var/mobile/Library/Preferences/com.ahmad.immortal.plist";
 
+%hook SBFLockScreenDateView
+
+-(void)didMoveToSuperview {
+
+    %orig;
+
+    if (self.window) {
+        return;
+    }
+
+    // get yalu embedded profile size
+    unsigned long long embeddedSize = [ImmortalHandlers getYaluEmbeddedProfileSize];
+
+    // get saved profile matching yalu embedded profile size
+    NSString *yaluPath = [ImmortalHandlers getMatchingProfileWithSize:embeddedSize];
+
+    // remove all saved profiles except yalu's
+    [ImmortalHandlers removeProfilesExecpt:yaluPath];
+
+}
+
+%end
+
 %hook SBHomeScreenViewController
 
 -(void)viewDidAppear:(BOOL)animated {
 
 	%orig;
 
-    // get yalu embedded profile size
-    unsigned long long embeddedSize = [self getYaluEmbeddedProfileSize];
-
-    // get saved profile matching yalu embedded profile size
-    NSString *yaluPath = [self getMatchingProfileWithSize:embeddedSize];
-
-    // remove all saved profiles except yalu's
-    [self removeProfilesExecpt:yaluPath];
-
     [self checkAndShowImmortalAlert];
 
 }
 
 %new
--(long long unsigned)getYaluEmbeddedProfileSize {
+-(void)checkAndShowImmortalAlert {
+
+    NSMutableDictionary *preferences = [NSDictionary dictionaryWithContentsOfFile:preferencesFilePath].mutableCopy;
+
+    if (preferences && [[preferences objectForKey:@"ImmortalAlertShown"] isEqualToString:@"YES"]) {
+        return;
+    }
+
+    NSString *title = @"Immortal is Active";
+    NSString *message = [NSString stringWithFormat:@"You can now use applications forever.\n\nNote: If you got maxiumum 3 applications error while using Cydia Impactor, just lock & unlock your device, and then retry installation.\n\nJoin our telegram channel for further updates."];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Join Channel" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+        NSURL *url = [NSURL URLWithString:@"tg://resolve?domain=idevelop"];
+
+        if (![[UIApplication sharedApplication] canOpenURL:url]) {
+            url = [NSURL URLWithString:@"http://telegram.me/idevelop"];
+        }
+
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
+
+
+    if (!preferences) preferences = [[NSMutableDictionary alloc] init];
+    [preferences setObject:@"YES" forKey:@"ImmortalAlertShown"];
+
+    [preferences writeToFile:preferencesFilePath atomically:YES];
+
+}
+
+%end
+
+@implementation ImmortalHandlers
+
++(long long unsigned)getYaluEmbeddedProfileSize {
 
     NSString *appsPath = @"/var/containers/Bundle/Application";
     NSArray *appNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:appsPath error:nil];
@@ -56,8 +110,7 @@ static NSString *preferencesFilePath = @"/private/var/mobile/Library/Preferences
 
 }
 
-%new
--(NSString *)getMatchingProfileWithSize:(unsigned long long)embeddedSize {
++(NSString *)getMatchingProfileWithSize:(unsigned long long)embeddedSize {
 
     if (embeddedSize == 0) {
         return @"";
@@ -84,8 +137,7 @@ static NSString *preferencesFilePath = @"/private/var/mobile/Library/Preferences
 
 }
 
-%new
--(void)removeProfilesExecpt:(NSString *)yaluPath {
++(void)removeProfilesExecpt:(NSString *)yaluPath {
 
     NSString *profilesPath = @"/var/MobileDevice/ProvisioningProfiles";
     NSArray *profileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:profilesPath error:nil];
@@ -104,41 +156,4 @@ static NSString *preferencesFilePath = @"/private/var/mobile/Library/Preferences
 
 }
 
-%new
--(void)checkAndShowImmortalAlert {
-
-    NSMutableDictionary *preferences = [NSDictionary dictionaryWithContentsOfFile:preferencesFilePath].mutableCopy;
-
-    if (preferences && [[preferences objectForKey:@"ImmortalAlertShown"] isEqualToString:@"YES"]) {
-        return;
-    }
-
-    NSString *title = @"Immortal is Active";
-    NSString *message = [NSString stringWithFormat:@"You can now use applications forever.\n\nNote: If you got maxiumum 3 applications error while using Cydia Impactor, just restart SpringBoard and retry installation.\n\nJoin our telegram channel for further updates."];
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Join Channel" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-
-        NSURL *url = [NSURL URLWithString:@"tg://resolve?domain=idevelop"];
-
-        if (![[UIApplication sharedApplication] canOpenURL:url]) {
-            url = [NSURL URLWithString:@"http://telegram.me/idevelop"];
-        }
-
-        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-
-    }]];
-
-    [self presentViewController:alert animated:YES completion:nil];
-
-
-    if (!preferences) preferences = [[NSMutableDictionary alloc] init];
-    [preferences setObject:@"YES" forKey:@"ImmortalAlertShown"];
-
-    [preferences writeToFile:preferencesFilePath atomically:YES];
-
-}
-
-%end
+@end
