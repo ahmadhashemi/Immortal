@@ -11,7 +11,7 @@ Free Apple IDs have two limitations for side-loading:
 1. You can have 3 side-loaded application on one device simultaneously.
 2. You can side-load maximum number of 10 applications each week.
 
-Immortal tweak removes first limit, because it's something which is checked on device. You just need to restart your device after installing each 3 applications and continue installing 3 other; until you reach 10 applications per 7 days limit.
+Immortal tweak removes first limit, because it's something which is checked on device. You just need to lock & unlock your device after installing each 3 applications, and then continue installing 3 others; until you reach 10 applications per 7 days limit.
 
 Second limit is set on Apple's server and can't get bypassed using any tweak. **So here is how you can use tweak:**
 
