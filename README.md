@@ -5,7 +5,7 @@ Prevent expiration of signed iOS applications &amp; bypass 3 free signed applica
 ## Benefits
 After installing Immortal, you can use [Cydia Impactor](http://cydiaimpactor.com/) to install unlimited number of applications and games that are signed just using a free Apple ID. They will live on your iDevice forever and will never get expired or revoked.
 
-## How to use
+## What problem does Immortal solve
 Free Apple IDs have two limitations for side-loading:
 
 1. You can have 3 side-loaded application on one device simultaneously.
@@ -13,9 +13,10 @@ Free Apple IDs have two limitations for side-loading:
 
 Immortal tweak removes first limit, because it's something which is checked on device. You just need to lock & unlock your device after installing each 3 applications, and then continue installing 3 others; until you reach 10 applications per 7 days limit.
 
-Second limit is set on Apple's server and can't get bypassed using any tweak. **So here is how you can use tweak:**
+Second limit is set on Apple's server and can't get bypassed using any tweak.
 
-- You can resign 10 new applications each week with same account used before. Here nothing gets expired or revoked, but you still have limit of 10 application per week.
+## How to use
+- You can resign 10 new applications each week with the same account used before. Nothing gets expired or revoked, but you still have limit of 10 application per week.
 - You can use multiple accounts, and resign 10 applications in week using each one. So you can resign as many as applications and games you want, by changing account when you reach 10 resigns per week.
 
 [Cydia Impactor](http://cydiaimpactor.com/) is the main application which is used for resigning with free Apple IDs.
