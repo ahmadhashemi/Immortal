@@ -1,7 +1,7 @@
 Package: com.ahmad.immortal
 Name: Immortal
 Depends: mobilesubstrate
-Version: 1.2
+Version: 1.2.1
 Architecture: iphoneos-arm
 Description: Prevent expiration of signed iOS applications & bypass 3 free signed applications per device limit
 Maintainer: Ahmad
